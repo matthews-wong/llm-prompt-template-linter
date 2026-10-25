@@ -40,3 +40,19 @@ python3 -m unittest discover -s tests
 ```
 
 Exit code is 1 when any finding is reported. No dependencies, no network.
+
+## Design notes
+
+- The header is a deliberately tiny `key: value` subset, not YAML, so the
+  linter stays dependency-free. Lists use `[a, b]`.
+- PL007 only checks that an untrusted variable sits inside a tag pair such as
+  `<document>{{text}}</document>`. It cannot tell whether the surrounding
+  instructions are good; it catches the common mistake of pasting retrieved
+  text straight into the instructions.
+- Templates are data: `--render` substitutes values textually and never
+  evaluates anything inside them.
+
+## Validation
+
+`make validate` runs the unit tests and lints `prompts/`. CI runs the same
+target.
